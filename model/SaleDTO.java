@@ -1,13 +1,13 @@
 package se.kth.iv1350.model;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
  * Represents the Data Transfer Object of a Sale
  */
 public class SaleDTO {
-    public LocalTime timeOfStartedSale;
+    public LocalDateTime timeOfStartedSale;
     public ArrayList<ItemDTO> itemsCurrentlyInSale = new ArrayList<>();
     public double discount;
     public ReceiptDTO receiptDTO;

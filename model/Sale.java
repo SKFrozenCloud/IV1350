@@ -1,13 +1,13 @@
 package se.kth.iv1350.model;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 /**
  * Represents a Sale with different attributes
  */
 public class Sale {
-    private LocalTime timeOfStartedSale;
+    private LocalDateTime timeOfStartedSale;
     private ArrayList<Item> itemsCurrentlyInSale = new ArrayList<>();
     private double discount;
     private Receipt receiptForSale;
@@ -17,7 +17,7 @@ public class Sale {
      * Creates a new instance representing the different parts of a sale
      */
     public Sale() {
-        this.timeOfStartedSale = LocalTime.now();
+        this.timeOfStartedSale = LocalDateTime.now();
         receiptForSale = new Receipt();
         customerPaymentForSale = new CustomerPayment();
     }
@@ -54,7 +54,7 @@ public class Sale {
      * 
      * @return the time stamp of initated sale
      */
-    public LocalTime getTimeOfStartedSale() {
+    public LocalDateTime getTimeOfStartedSale() {
         return timeOfStartedSale;
     }
 

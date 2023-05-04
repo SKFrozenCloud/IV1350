@@ -1,6 +1,6 @@
 package se.kth.iv1350.model;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 /**
  * Represents the Data Transfer Object for the receipt
@@ -8,7 +8,7 @@ import java.time.LocalTime;
 public class ReceiptDTO {
     public double totalVAT;
     public double totalSalePrice;
-    public LocalTime date;
+    public LocalDateTime date;
     public double change;
     public String[] itemName;
     public double[] itemPrice;

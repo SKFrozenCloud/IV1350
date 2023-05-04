@@ -1,6 +1,6 @@
 package se.kth.iv1350.model;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 /**
  * Represents a Receipt with its attributes
@@ -8,7 +8,7 @@ import java.time.LocalTime;
 public class Receipt {
     private double totalVAT;
     private double totalSalePrice;
-    private LocalTime timeOfReceiptCreation;
+    private LocalDateTime timeOfReceiptCreation;
     private double change;
     private String[] itemName = new String[0];
     private double[] itemPrice = new double[0];
@@ -20,7 +20,7 @@ public class Receipt {
      * Creates a new instance of an empty Receipt with a timestamp
      */
     public Receipt() {
-        this.timeOfReceiptCreation = LocalTime.now();
+        this.timeOfReceiptCreation = LocalDateTime.now();
     }
 
     /**
@@ -113,7 +113,7 @@ public class Receipt {
      * 
      * @return Date for Receipt creation
      */
-    public LocalTime getDate() {
+    public LocalDateTime getDate() {
         return timeOfReceiptCreation;
     }
 

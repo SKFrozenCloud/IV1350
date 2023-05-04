@@ -13,6 +13,6 @@ public class Main {
         Printer printer = new Printer();
         Controller contr = new Controller(accountSys, inventorySys, printer);
         View view = new View(contr);
-        view.hardCode();
+        view.runFakeExecution();
     }
 }

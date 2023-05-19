@@ -1,12 +1,12 @@
 package se.kth.iv1350.controller;
 
-import se.kth.iv1350.integration.AccountingSystem;
-import se.kth.iv1350.integration.InventorySystem;
-import se.kth.iv1350.integration.Printer;
-import se.kth.iv1350.model.Item;
-import se.kth.iv1350.model.ItemDTO;
-import se.kth.iv1350.model.Sale;
-import se.kth.iv1350.model.SaleDTO;
+import se.kth.iv1350.exceptions.InventoryDatabaseException;
+import se.kth.iv1350.exceptions.MissingItemIDException;
+import se.kth.iv1350.integration.*;
+import se.kth.iv1350.model.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a Controller for integration and model layer
@@ -16,13 +16,16 @@ public class Controller {
     private InventorySystem inventorySystemController;
     private Printer printerController;
     private Sale saleController;
+    private List<CustomerPaymentObserver> customerPaymentObservers = new ArrayList<>();
+    private TotalRevenueFileOutput totalRevenueFileOutput = new TotalRevenueFileOutput();
+    private DeveloperLog developerLog = new DeveloperLog();
 
     /**
      * Creates a new instance of Controller
      * 
-     * @param accountSys
-     * @param invSys
-     * @param printer
+     * @param accountSys - accounting system linked to controller
+     * @param invSys     - inventory system linked to controller
+     * @param printer    - printer linked to controller
      */
     public Controller(AccountingSystem accountSys, InventorySystem invSys, Printer printer) {
         accountSysController = accountSys;
@@ -31,16 +34,38 @@ public class Controller {
     }
 
     /**
-     * Adds Item found in <code>InventorySystem</code> connected by
-     * <code>itemID</code> to <code>Sale</code>
+     * Adds new an observer for CustomerPayment class to the controller
      * 
-     * @param itemID
+     * @param customerPaymentObserver - the observer to be added
      */
-    public void scanItem(int itemID) {
+    public void addCustomerPaymentObserver(CustomerPaymentObserver customerPaymentObserver) {
+        customerPaymentObservers.add(customerPaymentObserver);
+    }
+
+    /**
+     * Adds Item found in <code> InventorySystem </code> connected by
+     * <code> itemID </code> to <code>Sale</code>
+     * 
+     * @param itemID - itemId to be searched for
+     * @throws OperationFailedException - thrown if there is server issues or if
+     *                                  there is no match for ItemID in the
+     *                                  inventriy system
+     */
+    public void scanItem(int itemID) throws OperationFailedException {
         ItemDTO itemDTOFromDatabase = null;
-        itemDTOFromDatabase = inventorySystemController.getItemDTOFromDatabase(itemID);
+
+        try {
+            itemDTOFromDatabase = inventorySystemController.getItemDTOFromDatabase(itemID);
+        } catch (MissingItemIDException missingItemID) {
+            throw new OperationFailedException("Item was not found in inventory", missingItemID);
+
+        } catch (InventoryDatabaseException inventoryDatabaseDown) {
+            developerLog.addExceptionToLog(inventoryDatabaseDown.getMessage());
+            throw new OperationFailedException("Inventory server is down", inventoryDatabaseDown);
+        }
 
         Item itemFromDatabase = new Item(itemDTOFromDatabase);
+
         itemFromDatabase.addToQuantity(1);
 
         saleController.addNewItemToSale(itemFromDatabase);
@@ -51,6 +76,8 @@ public class Controller {
      */
     public void startSale() {
         saleController = new Sale();
+        saleController.getCustomerPaymentForSale().addCustomerPaymentObservers(customerPaymentObservers);
+        saleController.getCustomerPaymentForSale().setTotalRevenueFileOutput(totalRevenueFileOutput);
     }
 
     /**
@@ -58,17 +85,9 @@ public class Controller {
      * <code>Sale</code>
      */
     public void endSale() {
-        SaleDTO saleDTO = null;
-
-        try {
-            saleDTO = new SaleDTO(saleController);
-        } catch (NullPointerException nullPointerException) {
-            return;
-        }
-
+        SaleDTO saleDTO = new SaleDTO(saleController);
         inventorySystemController.updateQuantityFromSale(saleDTO);
         accountSysController.update(saleDTO);
-        this.saleController = null;
         printerController.printReceipt(saleDTO.receiptDTO);
     }
 
@@ -93,14 +112,5 @@ public class Controller {
     public SaleDTO getSaleDTO() {
         SaleDTO saleDTO = new SaleDTO(saleController);
         return saleDTO;
-    }
-
-    /**
-     * Get method for current sale linked to controller
-     * 
-     * @return - current sale
-     */
-    public Sale getSaleController() {
-        return saleController;
     }
 }

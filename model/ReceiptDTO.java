@@ -1,6 +1,6 @@
 package se.kth.iv1350.model;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * Represents the Data Transfer Object for the receipt

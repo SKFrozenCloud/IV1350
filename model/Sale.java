@@ -79,10 +79,6 @@ public class Sale {
     public boolean isItemInSale(Item item) {
         boolean isItemInSale = false;
 
-        if (item == null) {
-            return isItemInSale;
-        }
-
         for (Item itemSearch : itemsCurrentlyInSale) {
             if (itemSearch.getItemID() == item.getItemID())
                 isItemInSale = true;
@@ -108,10 +104,8 @@ public class Sale {
         else {
             itemsCurrentlyInSale.add(itemToAddToSale);
         }
-
         customerPaymentForSale.increaseAmountToPay(itemToAddToSale.getPrice());
         receiptForSale.addRow(itemToAddToSale);
-
     }
 
 }

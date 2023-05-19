@@ -14,10 +14,9 @@ public class SaleDTO {
     public CustomerPaymentDTO customerPaymentDTO;
 
     /**
-     * Creates a new instance, representing the Data Transfer Object of the Sale
-     * class
+     * Creates a new instance, representing the Data Transfer Object
      * 
-     * @param saleToDTO - Sale to convert into a DTO
+     * @param saleToDTO
      */
     public SaleDTO(Sale saleToDTO) {
         this.timeOfStartedSale = saleToDTO.getTimeOfStartedSale();

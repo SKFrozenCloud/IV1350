@@ -37,6 +37,6 @@ public class ItemDTO {
         this.price = item.getPrice();
         this.VAT = item.getVAT();
         this.name = item.getName();
-        this.quantity = item.getQuantity();
+        quantity = item.getQuantity();
     }
 }

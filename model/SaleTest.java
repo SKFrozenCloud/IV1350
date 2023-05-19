@@ -9,7 +9,7 @@ class SaleTest {
     private Sale sale = new Sale();
 
     @AfterEach
-    private void cleanUp() {
+    public void cleanup() {
         sale = new Sale();
     }
 

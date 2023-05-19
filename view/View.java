@@ -1,10 +1,14 @@
 package se.kth.iv1350.view;
 
 import se.kth.iv1350.controller.Controller;
-import se.kth.iv1350.model.ReceiptDTO;
+import se.kth.iv1350.exceptions.InventoryDatabaseException;
+import se.kth.iv1350.exceptions.MissingItemIDException;
+import se.kth.iv1350.model.Item;
+import se.kth.iv1350.model.ItemDTO;
+import se.kth.iv1350.model.SaleDTO;
 
 /**
- * represent the view that a cahsier would have
+ * represent the view that a cashier would have
  */
 public class View {
     private Controller contr;
@@ -16,6 +20,7 @@ public class View {
      */
     public View(Controller contr) {
         this.contr = contr;
+        contr.addCustomerPaymentObserver(new TotalRevenueView());
     }
 
     /**
@@ -27,15 +32,31 @@ public class View {
         concludeSale();
     }
 
+    /**
+     * fetches item from through itemID
+     * 
+     * @param itemID - item to be fetched
+     */
+    private void fetchItem(int itemID) {
+        try {
+            contr.scanItem(itemID);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * preform a fake sale by calling all the system operation in the controller.
+     */
     public void registerItems() {
         System.out.println("Scanning itemID: 121");
-        contr.scanItem(121);
+        fetchItem(121);
 
         System.out.println("Scanning itemID: 123");
-        contr.scanItem(123);
+        fetchItem(123);
 
         System.out.println("Scanning itemID: 121");
-        contr.scanItem(121);
+        fetchItem(121);
     }
 
     private void startSale() {

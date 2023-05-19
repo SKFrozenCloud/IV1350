@@ -53,8 +53,8 @@ public class Receipt {
     /**
      * Gets an Items name by element in list
      * 
-     * @param elementInItemList -
-     * @return
+     * @param elementInItemList - which row the fetch
+     * @return name of item
      */
     public String getItemNameByElement(int elementInItemList) {
         return itemName[elementInItemList];

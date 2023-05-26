@@ -1,7 +1,5 @@
 package se.kth.iv1350.model;
 
-import se.kth.iv1350.integration.TotalRevenueFileOutput;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +11,6 @@ public class CustomerPayment {
     private double change;
     private double paidAmount;
     private List<CustomerPaymentObserver> customerPaymentObservers = new ArrayList<>();
-    private TotalRevenueFileOutput totalRevenueFileOutput;
 
     /**
      * create a new instance of CustomerPayment with starting values of zero payment
@@ -50,16 +47,6 @@ public class CustomerPayment {
         change = paymentAmount - amountToPay;
         paidAmount = paymentAmount;
         notifyCustomerPaymentObservers();
-        updateTotalRevenueLog();
-    }
-
-    /**
-     * sets a class that can output to file for this class
-     * 
-     * @param totalRevenueFileOutput - class that outputs to file
-     */
-    public void setTotalRevenueFileOutput(TotalRevenueFileOutput totalRevenueFileOutput) {
-        this.totalRevenueFileOutput = totalRevenueFileOutput;
     }
 
     /**
@@ -78,13 +65,6 @@ public class CustomerPayment {
     private void notifyCustomerPaymentObservers() {
         for (CustomerPaymentObserver customerPaymentObserver : customerPaymentObservers)
             customerPaymentObserver.newPayment(paidAmount - change);
-    }
-
-    /**
-     * Updates amount for sale that updates the log
-     */
-    private void updateTotalRevenueLog() {
-        totalRevenueFileOutput.newPayment(paidAmount - change);
     }
 
     /**

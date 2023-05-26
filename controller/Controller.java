@@ -77,7 +77,7 @@ public class Controller {
     public void startSale() {
         saleController = new Sale();
         saleController.getCustomerPaymentForSale().addCustomerPaymentObservers(customerPaymentObservers);
-        saleController.getCustomerPaymentForSale().setTotalRevenueFileOutput(totalRevenueFileOutput);
+        saleController.getCustomerPaymentForSale().addCustomerPaymentObservers(totalRevenueFileOutput);
     }
 
     /**

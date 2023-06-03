@@ -17,7 +17,6 @@ public class Controller {
     private Printer printerController;
     private Sale saleController;
     private List<CustomerPaymentObserver> customerPaymentObservers = new ArrayList<>();
-    private TotalRevenueFileOutput totalRevenueFileOutput = new TotalRevenueFileOutput();
     private DeveloperLog developerLog = new DeveloperLog();
 
     /**
@@ -31,6 +30,8 @@ public class Controller {
         accountSysController = accountSys;
         inventorySystemController = invSys;
         printerController = printer;
+
+        addCustomerPaymentObserver(new TotalRevenueFileOutput());
     }
 
     /**
@@ -77,7 +78,6 @@ public class Controller {
     public void startSale() {
         saleController = new Sale();
         saleController.getCustomerPaymentForSale().addCustomerPaymentObservers(customerPaymentObservers);
-        saleController.getCustomerPaymentForSale().addCustomerPaymentObservers(totalRevenueFileOutput);
     }
 
     /**
